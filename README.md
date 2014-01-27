@@ -7,7 +7,7 @@ on all major operating systems.
 
 ## Installing on Windows
 
-Rabbit MQ is built on the robust Erlang OTP platform which is a pre-requisite before installing the Rabbit MQ Server which you download from:
+Rabbit MQ is built on the robust Erlang OTP platform which is a prerequisite before installing the Rabbit MQ Server which you download from:
 
   1. Download and install [Eralng OTP For Windows](http://www.erlang.org/download/otp_win32_R16B03.exe) (vR16B03)
   2. Run the [Rabbit MQ Server Windows Installer](http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.3/rabbitmq-server-3.2.3.exe) (v3.2.3)
@@ -21,7 +21,7 @@ To provide better visibility of the state of the Rabbit MQ Server instance it's 
 
     "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.2.2\sbin\rabbitmq-plugins.bat" enable rabbitmq_management
 
-To see the new changes you need to restart the **RabbitMQ** Windows Service which you can do on the command line with:
+To see the new changes you need to restart the **RabbitMQ** Windows Service which can be done on the command line with:
 
     net stop RabbitMQ && net start RabbitMQ
 
@@ -35,26 +35,26 @@ Or by restarting the service from the **services.msc** MMC applet UI:
 
 ![RabbitMQ Windows Service](https://raw.github.com/mythz/rabbitmq-windows/master/img/rabbitmq-service.png)
 
-Once restarted you can view Rabbit MQ's management UI with a web browser at: `http://localhost:15672` which shows an overview on 
+Once restarted, open the Rabbit MQ's management UI with a web browser at: `http://localhost:15672` to see an overview of 
 the state of the Rabbit MQ server instance:
 
 ![RabbitMQ Management UI](https://raw.github.com/mythz/rabbitmq-windows/master/img/rabbitmq-management-ui.png)
 
 ## Usage from .NET
 
-To use Rabbit MQ from .NET get the Rabbit MQ's [.NET AMQP client libraries from NuGet](https://www.nuget.org/packages/RabbitMQ.Client):
+To use Rabbit MQ from .NET get Rabbit MQ's [.NET client bindings from NuGet](https://www.nuget.org/packages/RabbitMQ.Client):
 
     PM> Install-Package RabbitMQ.Client
 
 With the package installed, we can go through a common scenario of sending and receiving durable messages with Rabbit MQ.
 
 See [RabbitMqTests.cs](https://github.com/mythz/rabbitmq-windows/blob/master/src/RabbitMq.Tests/RabbitMqTests.cs) in this repo, 
-for a stand-alone example of this walk-thru below:
+for runnable samples of this walkthru below:
 
 ### Declare durable Exchange and Queue
 
-First you need to register the type of Exchange and Queue before you can use them. 
-For a durable work queue you want to create a durable "direct" exchange and bind a durable queue to it, e.g:
+Firstly, you will need to register the type of Exchange and Queue before you can use them. 
+To create a durable work queue, create a durable "direct" exchange and bind a durable queue to it, e.g:
 
 ```csharp
 const string ExchangeName = "test.exchange";
@@ -70,9 +70,9 @@ using (IModel channel = conn.CreateModel())
 }
 ```
 
-In this example we'll reuse the QueueName for the routing key which will enable sending messages to a specific queue.
+In this example we'll also reuse the QueueName for the **routing key** which will enable directly sending messages to a specific queue.
 
-The code only needs to be run once which registers and configures the Exchange and Queue we'll be using in the remaining examples.
+The registration code only needs to be run once to register and configure the Exchange and Queue we'll be using in the remaining examples.
 Once run, go back to the Management UI to see the new **test.exchange* Exchange with a binding to the newly created **test.queue**:
 
 ![UI - Test Exchange](https://raw.github.com/mythz/rabbitmq-windows/master/img/ui-testexchange.png)
@@ -80,10 +80,8 @@ Once run, go back to the Management UI to see the new **test.exchange* Exchange 
 ### Publishing a persistent message to a queue
 
 Once the exchange and queue is setup we can start publishing messages to it. 
-Rabbit MQ lets you send messages with any `byte[]` body, for text messages you can just send UTF8 bytes.
+Rabbit MQ lets you send messages with any arbitrary `byte[]` body, for text messages you should send them as UTF8 bytes.
 To ensure the message is persistent across Rabbit MQ Server starts you will want to mark the message as persistent as seen below:
-
-![UI - Test Queue](https://raw.github.com/mythz/rabbitmq-windows/master/img/ui-testqueue.png)
 
 ```csharp
 var props = channel.CreateBasicProperties();
@@ -95,11 +93,11 @@ channel.BasicPublish(ExchangeName, routingKey:QueueName, basicProperties:props, 
 
 The routing key will ensure that a copy of the message is delievered to the **test.queue** which you can see in the Admin UI:
 
-***
+![UI - Test Queue](https://raw.github.com/mythz/rabbitmq-windows/master/img/ui-testqueue.png)
 
 ### Receiving Messages
 
-There are a couple of different ways you can read published messages from the queue, the most straight forward way is to use `BasicGet`:
+There are a couple of different ways you can read published messages from the queue, the most straightforward way is to use `BasicGet`:
 
 ```csharp
 BasicGetResult msgResponse = channel.BasicGet(QueueName, noAck:true);
@@ -110,8 +108,8 @@ msgBody //Hello, World!
 
 The `noAck:true` flag tells Rabbit MQ to immediately remove the message from the queue. 
 
-Another popular use-case is to only send acknowledgement that you've successfully accepted the message (and remove it from the queue) 
-which can be done with a seperate call to `BasicAck`:
+Another popular use-case is to only send acknowledgement (and remove it from the queue) after you've successfully accepted the message, 
+which can be done with a separate call to `BasicAck`:
 
 ```csharp
 BasicGetResult msgResponse = channel.BasicGet(QueueName, noAck:false);
@@ -121,7 +119,7 @@ BasicGetResult msgResponse = channel.BasicGet(QueueName, noAck:false);
 channel.BasicAck(msgResponse.DeliveryTag, multiple:false);
 ```
 
-An alternate way to consume messages is via a subscription push-based event model.
+An alternate way to consume messages is via a push-based event subscription.
 You can use the built-in `QueueingBasicConsumer` to provide a simplified programming model by allowing you to block on a 
 Shared Queue until a message is received, e.g:
 
@@ -138,10 +136,10 @@ msgBody //Hello, World!
 ### Processing multiple messages using a subscription
 
 The Shared Queue will block until it receives a message or the channel it's assigned to is closed which causes it to throw 
-an `EndOfStreamException`. With this, you can setup a long-running background thread to process multiple messages in an 
-infinite loop until the Queue is closed.
+an `EndOfStreamException`. With this, you can setup a long-running background thread to continually process multiple messages 
+in an infinite loop until the Queue is closed.
 
-The sample below shows an example of this in action which publishes 5 messages on a seperate thread before closing the channel 
+The sample below shows an example of this in action which publishes 5 messages on a separate thread before closing the channel 
 the subscription is bound to causing an **EndOfStreamException** to be thrown, ending the subscription and exiting the loop: 
 
 ```csharp
@@ -190,3 +188,5 @@ using (IModel channel = conn.CreateModel())
 ```
 
 The complete source of these examples are available in the stand-alone [RabbitMqTests.cs](https://github.com/mythz/rabbitmq-windows/blob/master/src/RabbitMq.Tests/RabbitMqTests.cs).
+
+
