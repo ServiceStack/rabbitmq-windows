@@ -73,7 +73,7 @@ using (IModel channel = conn.CreateModel())
 In this example we'll also reuse the QueueName for the **routing key** which will enable directly sending messages to a specific queue.
 
 The registration code only needs to be run once to register and configure the Exchange and Queue we'll be using in the remaining examples.
-Once run, go back to the Management UI to see the new **test.exchange* Exchange with a binding to the newly created **test.queue**:
+Once run, go back to the Management UI to see the new **test.exchange** Exchange with a binding to the newly created **test.queue**:
 
 ![UI - Test Exchange](https://raw.github.com/mythz/rabbitmq-windows/master/img/ui-testexchange.png)
 
