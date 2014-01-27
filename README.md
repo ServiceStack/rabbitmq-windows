@@ -63,9 +63,9 @@ const string QueueName = "test.queue";
 using (IConnection conn = rabbitMqFactory.CreateConnection())
 using (IModel channel = conn.CreateModel())
 {
-    channel.ExchangeDeclare(ExchangeName, "direct", durable: true, autoDelete: false, arguments: null);
+    channel.ExchangeDeclare(ExchangeName, "direct", durable:true, autoDelete:false, arguments:null);
                 
-    channel.QueueDeclare(QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+    channel.QueueDeclare(QueueName, durable:true, exclusive:false, autoDelete:false, arguments:null);
     channel.QueueBind(QueueName, ExchangeName, routingKey: QueueName);
 }
 ```
@@ -90,7 +90,7 @@ var props = channel.CreateBasicProperties();
 props.SetPersistent(true);
 
 var msgBody = Encoding.UTF8.GetBytes("Hello, World!");
-channel.BasicPublish(ExchangeName, routingKey: QueueName, basicProperties: props, body: msgBody);
+channel.BasicPublish(ExchangeName, routingKey:QueueName, basicProperties:props, body:msgBody);
 ```
 
 The routing key will ensure that a copy of the message is delievered to the **test.queue** which you can see in the Admin UI:
@@ -127,7 +127,7 @@ Shared Queue until a message is received, e.g:
 
 ```csharp
 var consumer = new QueueingBasicConsumer(channel);
-channel.BasicConsume(QueueName, noAck: true, consumer: consumer);
+channel.BasicConsume(QueueName, noAck:true, consumer:consumer);
 
 var msgResponse = consumer.Queue.Dequeue(); //blocking
 
@@ -155,11 +155,11 @@ using (IModel channel = conn.CreateModel())
         var now = DateTime.UtcNow;
         while (DateTime.UtcNow - now < TimeSpan.FromSeconds(5))
         {
-            var props = channel.CreateBasicProperties();
-            props.SetPersistent(true);
+            var p = channel.CreateBasicProperties();
+            p.SetPersistent(true);
 
             var msgBody = Encoding.UTF8.GetBytes("Hello, World!");
-            channel.BasicPublish(ExchangeName, routingKey: QueueName, basicProperties: props, body: msgBody);
+            channel.BasicPublish(ExchangeName, routingKey:QueueName, basicProperties:p, body:msgBody);
 
             Thread.Sleep(1000);
         }
