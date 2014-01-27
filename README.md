@@ -7,16 +7,16 @@ on all major operating systems.
 
 ## Installing on Windows
 
-Rabbit MQ is built on the robust Erlang OTP platform which is a prerequisite before installing the Rabbit MQ Server which you download from:
+Rabbit MQ is built on the robust Erlang OTP platform which is a prerequisite for installing Rabbit MQ Server, both are downloadable at:
 
   1. Download and install [Eralng OTP For Windows](http://www.erlang.org/download/otp_win32_R16B03.exe) (vR16B03)
   2. Run the [Rabbit MQ Server Windows Installer](http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.3/rabbitmq-server-3.2.3.exe) (v3.2.3)
 
-This will download, install and run the Rabbit MQ Server Windows Service listening for AMQP clients at the default port **5672**.
+The windows installer will download, install and run the Rabbit MQ Server Windows Service listening for AMQP clients at the default port: **5672**.
 
 ### Enable [Rabbit MQ's Management Plugin](http://www.rabbitmq.com/management.html)
 
-To provide better visibility of the state of the Rabbit MQ Server instance it's recommended to enable 
+To provide better visibility of the state of the Rabbit MQ Server instance it's highly recommended to enable 
 [Rabbit MQ's Management Plugin](http://www.rabbitmq.com/management.html) which you can do on the command line with:
 
     "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.2.2\sbin\rabbitmq-plugins.bat" enable rabbitmq_management
