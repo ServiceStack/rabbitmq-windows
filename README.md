@@ -19,7 +19,7 @@ The windows installer will download, install and run the Rabbit MQ Server Window
 To provide better visibility of the state of the Rabbit MQ Server instance it's highly recommended to enable 
 [Rabbit MQ's Management Plugin](http://www.rabbitmq.com/management.html) which you can do on the command line with:
 
-    "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.2.2\sbin\rabbitmq-plugins.bat" enable rabbitmq_management
+    "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.2.3\sbin\rabbitmq-plugins.bat" enable rabbitmq_management
 
 To see the new changes you need to restart the **RabbitMQ** Windows Service which can be done on the command line with:
 
